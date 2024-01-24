@@ -1,9 +1,17 @@
 const holes = document.querySelectorAll('.hole');
 const moles = document.querySelectorAll('.mole');
+const backgrounds = document.querySelector('.background')
 const startButton = document.querySelector('#start');
-// TODO: Add the missing query selectors:
-const score; // Use querySelector() to get the score element
-const timerDisplay; // use querySelector() to get the timer element.
+// Select the missing query selectors:
+const score = document.querySelector('#score'); // Use querySelector() to get the score element
+const timerDisplay = document.querySelector('#timer'); // Use querySelector() to get the timer element
+const song = new Audio("https://github.com/gabrielsanchez/erddiagram/blob/main/molesong.mp3?raw=true");
+const cursors = document.addEventListener('mousemove', (e) => {
+  const cursor = document.querySelector('.cursor');
+  cursor.style.left = e.pageX + 'px';
+  cursor.style.top = e.pageY + 'px';
+});
+
 
 let time = 0;
 let timer;
@@ -11,241 +19,173 @@ let lastHole = 0;
 let points = 0;
 let difficulty = "hard";
 
-/**
- * Generates a random integer within a range.
- *
- * The function takes two values as parameters that limits the range 
- * of the number to be generated. For example, calling randomInteger(0,10)
- * will return a random integer between 0 and 10. Calling randomInteger(10,200)
- * will return a random integer between 10 and 200.
- *
- */
+
+
+// Function to generate a random integer within a range
 function randomInteger(min, max) {
-  // return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-/**
- * Sets the time delay given a difficulty parameter.
- *
- * The function takes a `difficulty` parameter that can have three values: `easy`
- * `normal` or `hard`. If difficulty is "easy" then the function returns a time delay
- * of 1500 milliseconds (or 1.5 seconds). If the difficulty is set to "normal" it should
- * return 1000. If difficulty is set to "hard" it should return a randomInteger between
- * 600 and 1200.
- *
- * Example: 
- * setDelay("easy") //> returns 1500
- * setDelay("normal") //> returns 1000
- * setDelay("hard") //> returns 856 (returns a random number between 600 and 1200).
- *
- */
+// Function to set time delay based on difficulty level
 function setDelay(difficulty) {
-  // TODO: Write your code here.
-  
-}
+  const easyDelay = 1500;
+  const normalDelay = 1000;
 
-/**
- * Chooses a random hole from a list of holes.
- *
- * This function should select a random Hole from the list of holes.
- * 1. generate a random integer from 0 to 8 and assign it to an index variable
- * 2. get a random hole with the random index (e.g. const hole = holes[index])
- * 3. if hole === lastHole then call chooseHole(holes) again.
- * 4. if hole is not the same as the lastHole then keep track of 
- * it (lastHole = hole) and return the hole
- *
- * Example: 
- * const holes = document.querySelectorAll('.hole');
- * chooseHole(holes) //> returns one of the 9 holes that you defined
- */
+  if (difficulty === "easy") {
+    return easyDelay;
+  } else if (difficulty === "normal") {
+    return normalDelay;
+  } else if (difficulty === "hard") {
+    const randomDelay = Math.floor(Math.random() * (1200 - 600 + 1)) + 600;
+    return randomDelay;
+  } else {
+    console.warn("Invalid difficulty level. Defaulting to normal difficulty.");
+    return normalDelay;
+  }
+}
+setDelay("easy") //> Returns 1500
+setDelay("normal") //> Returns 1000
+setDelay("hard") //> Returns 856 (returns a random number between 600 and 1200)
+
+// Function to choose a random hole from a list
 function chooseHole(holes) {
-  // TODO: Write your code here.
+  const index = randomInteger(0, holes.length - 1);
+  const hole = holes[index];
 
-}
+  if (hole === lastHole) {
+    return chooseHole(holes);
+  }
 
-/**
-*
-* Calls the showUp function if time > 0 and stops the game if time = 0.
-*
-* The purpose of this function is simply to determine if the game should
-* continue or stop. The game continues if there is still time `if(time > 0)`.
-* If there is still time then `showUp()` needs to be called again so that
-* it sets a different delay and a different hole. If there is no more time
-* then it should call the `stopGame()` function. The function also needs to
-* return the timeoutId if the game continues or the string "game stopped"
-* if the game is over.
-*
-*  // if time > 0:
-*  //   timeoutId = showUp()
-*  //   return timeoutId
-*  // else
-*  //   gameStopped = stopGame()
-*  //   return gameStopped
-*
-*/
-function gameOver() {
-  // TODO: Write your code here
-  
-}
-
-/**
-*
-* Calls the showAndHide() function with a specific delay and a hole.
-*
-* This function simply calls the `showAndHide` function with a specific
-* delay and hole. The function needs to call `setDelay()` and `chooseHole()`
-* to call `showAndHide(hole, delay)`.
-*
-*/
-function showUp() {
-  let delay = 0; // TODO: Update so that it uses setDelay()
-  const hole = 0;  // TODO: Update so that it use chooseHole()
-  return showAndHide(hole, delay);
-}
-
-/**
-*
-* The purpose of this function is to show and hide the mole given
-* a delay time and the hole where the mole is hidden. The function calls
-* `toggleVisibility` to show or hide the mole. The function should return
-* the timeoutID
-*
-*/
-function showAndHide(hole, delay){
-  // TODO: call the toggleVisibility function so that it adds the 'show' class.
-  
-  const timeoutID = setTimeout(() => {
-    // TODO: call the toggleVisibility function so that it removes the 'show' class when the timer times out.
-    
-    gameOver();
-  }, 0); // TODO: change the setTimeout delay to the one provided as a parameter
-  return timeoutID;
-}
-
-/**
-*
-* Adds or removes the 'show' class that is defined in styles.css to 
-* a given hole. It returns the hole.
-*
-*/
-function toggleVisibility(hole){
-  // TODO: add hole.classList.toggle so that it adds or removes the 'show' class.
-  
+  lastHole = hole;
   return hole;
 }
 
-/**
-*
-* This function increments the points global variable and updates the scoreboard.
-* Use the `points` global variable that is already defined and increment it by 1.
-* After the `points` variable is incremented proceed by updating the scoreboard
-* that you defined in the `index.html` file. To update the scoreboard you can use 
-* `score.textContent = points;`. Use the comments in the function as a guide 
-* for your implementation:
-*
-*/
-function updateScore() {
-  // TODO: Write your code here
-
-  return points;
-}
-
-/**
-*
-* This function clears the score by setting `points = 0`. It also updates
-* the board using `score.textContent = points`. The function should return
-* the points.
-*
-*/
-function clearScore() {
-  // TODO: Write your code here
-  // points = 0;
-  // score.textContent = points;
-  return points;
-}
-
-/**
-*
-* Updates the control board with the timer if time > 0
-*
-*/
-function updateTimer() {
-  // TODO: Write your code here.
-  // hint: this code is provided to you in the instructions.
+// Function to show and hide the mole with a delay
+function showAndHide(hole, delay) {
+  toggleVisibility(hole); // Show the mole
+  const timeoutID = setTimeout(() => {
+    toggleVisibility(hole); // Hide the mole
+    gameOver();
+  }, delay, 1000);
   
+
+  return timeoutID;
+}
+// Function sets delay and choose which holes the mole shows up
+function showUp() {
+  const delay = setDelay(difficulty);
+  const hole = chooseHole(holes);
+  return showAndHide(hole, delay);
+}
+
+
+// Function to toggle visibility by adding or removing the 'show' class
+function toggleVisibility(hole) {
+  hole.classList.toggle('show');
+  return hole;
+}
+// Function updates score
+function updateScore() {
+  points++;
+  score.textContent = points;
+  return points;
+}
+
+// Function to clear the player's score
+function clearScore() {
+  points = 0;
+  score.textContent = points;
+  return points;
+}
+// Function to set the game duration
+function setDuration(duration) {
+  time = duration;
+  timerDisplay.textContent = time;
+}
+
+// Function to update the timer and end the game if time is up
+function updateTimer() {
+  if (time > 0){
+    time -= 1;
+    timerDisplay.textContent = time;
+  }
   return time;
 }
 
-/**
-*
-* Starts the timer using setInterval. For each 1000ms (1 second)
-* the updateTimer function get called. This function is already implemented
-*
-*/
+// Function starts timer
 function startTimer() {
-  // TODO: Write your code here
-  // timer = setInterval(updateTimer, 1000);
+  timer = setInterval(updateTimer, 1000);
   return timer;
 }
 
-/**
-*
-* This is the event handler that gets called when a player
-* clicks on a mole. The setEventListeners should use this event
-* handler (e.g. mole.addEventListener('click', whack)) for each of
-* the moles.
-*
-*/
+ //Function to handle when a mole is clicked
 function whack(event) {
-  // TODO: Write your code here.
-  // call updateScore()
-  return points;
+  updateScore();
+  playAudio(audioHit);
+  return points
 }
 
-/**
-*
-* Adds the 'click' event listeners to the moles. See the instructions
-* for an example on how to set event listeners using a for loop.
-*/
-function setEventListeners(){
-  // TODO: Write your code here
-
+// Function to set up click events for moles
+function setEventListeners() {
+  moles.forEach(mole => mole.addEventListener('click', whack));
   return moles;
 }
 
-/**
-*
-* This function sets the duration of the game. The time limit, in seconds,
-* that a player has to click on the sprites.
-*
-*/
-function setDuration(duration) {
-  time = duration;
-  return time;
+function playAudio(audioObject) {
+  audioObject.play();
 }
 
-/**
-*
-* This function is called when the game is stopped. It clears the
-* timer using clearInterval. Returns "game stopped".
-*
-*/
+function playSong() {
+  playAudio(song);
+}
+
+let isSongPlaying = false;
+
+ //Function to play or stop the song
+function toggleSong() {
+  if (isSongPlaying) {
+    stopAudio(song);
+    isSongPlaying = false;
+  } else {
+    playAudio(song);
+    song.loop = true; // Set the loop property to true for continuous playback
+    isSongPlaying = true;
+  }}
+
+// function to stop
 function stopGame(){
-  // stopAudio(song);  //optional
-  clearInterval(timer);
+  clearInterval(timer); // resets timer
   return "game stopped";
 }
 
-/**
-*
-* This is the function that starts the game when the `startButton`
-* is clicked.
-*
-*/
-function startGame(){
-  //setDuration(10);
-  //showUp();
-  return "game started";
+ //Function to start the game when the button is clicked
+function startGame() {
+  clearScore();
+  setDuration(10);
+  // Check if the timer is already running, and clear it if it is
+  if (timer) {
+    stopGame();
+  }
+  startTimer();
+  setEventListeners(); 
+  let moleVisible = false;
+    //Only call showUp() if a mole is not currently visible
+    if (!moleVisible) {
+      moleVisible = true;
+      showUp();
+     }
+     return "game started";
+    }
+
+//Function to handle when the game is over
+function gameOver() {
+  if (time > 0) {
+    const timeoutID = showUp();
+    return timeoutID;
+  } else {
+    const gameStopped = stopGame();
+    return gameStopped;
+  }
 }
 
 startButton.addEventListener("click", startGame);

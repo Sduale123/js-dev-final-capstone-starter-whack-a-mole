@@ -1,12 +1,19 @@
 <html>
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./src/styles.css">
   </head>
   <body>
-    <h1></h1>
+    <h1 id="title">Whack-a-Mole!!</h1>
     <div>
       <div>
         <h2>Click start to play!</h2>
+      </div>
+      <div>
+        <!-- Add a button to play the song -->
+        <h2 class=""><button onclick="playSong();" style="font-size: 20px; color: rgb(236, 181, 181); background-color: rgb(197, 221, 174);">Song</button></h2>
       </div>
       <div>
         <h2>score: <span id="score">0</span></h2>
@@ -14,6 +21,7 @@
       <div>
           <h2><span id="timer">0</span> seconds left.</h2>
       </div>
+      <div><h2><button id="start">start</button></h2></div>
     </div>
     <div class="grid">
       <div id="hole0" class="hole">
@@ -22,8 +30,39 @@
       <div id="hole1" class="hole">
         <div id="mole1" class="mole"></div>
       </div>
+      <div id="hole2" class="hole">
+        <div id="mole2" class="mole"></div>
+      </div>
+      <div id="hole3" class="hole">
+        <div id="mole3" class="mole"></div>
+      </div>
+      <div id="hole4" class="hole">
+        <div id="mole4" class="mole"></div>
+      </div>
+      <div id="hole5" class="hole">
+        <div id="mole5" class="mole"></div>
+      </div>
+      <div id="hole6" class="hole">
+        <div id="mole6" class="mole"></div>
+      </div>
+      <div id="hole7" class="hole">
+        <div id="mole7" class="mole"></div>
+      </div>
+      <div id="hole8" class="hole">
+        <div id="mole8" class="mole"></div>
+      </div>
+      <div id="cursors" class="cursor"></div>
       <!--TODO: Add the missing holes and moles. -->
     </div>
+    <audio id="backgroundMusic" loop>
+      <source src="https://github.com/gabrielsanchez/erddiagram/blob/main/molesong.mp3?raw=true" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
+   
+    <script>
+      // Declare the audioHit variable in the head section
+      const audioHit = new Audio("https://github.com/gabrielsanchez/erddiagram/blob/main/hit.mp3?raw=true");
+    </script>
     <script src="./src/index.js"></script>
   </body>
 </html>
